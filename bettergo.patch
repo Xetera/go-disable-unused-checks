@@ -1,0 +1,72 @@
+diff --git a/src/cmd/compile/internal/types2/resolver.go b/src/cmd/compile/internal/types2/resolver.go
+index 5676aa3618..8fee0f7128 100644
+--- a/src/cmd/compile/internal/types2/resolver.go
++++ b/src/cmd/compile/internal/types2/resolver.go
+@@ -760,22 +760,8 @@ func (check *Checker) unusedImports() {
+ }
+ 
+ func (check *Checker) errorUnusedPkg(obj *PkgName) {
+-       // If the package was imported with a name other than the final
+-       // import path element, show it explicitly in the error message.
+-       // Note that this handles both renamed imports and imports of
+-       // packages containing unconventional package declarations.
+-       // Note that this uses / always, even on Windows, because Go import
+-       // paths always use forward slashes.
+-       path := obj.imported.path
+-       elem := path
+-       if i := strings.LastIndex(elem, "/"); i >= 0 {
+-               elem = elem[i+1:]
+-       }
+-       if obj.name == "" || obj.name == "." || obj.name == elem {
+-               check.softErrorf(obj, UnusedImport, "%q imported and not used", path)
+-       } else {
+-               check.softErrorf(obj, UnusedImport, "%q imported as %s and not used", path, obj.name)
+-       }
++       // noop
++       _ = obj
+ }
+ 
+ // dir makes a good-faith attempt to return the directory
+diff --git a/src/cmd/compile/internal/types2/stmt.go b/src/cmd/compile/internal/types2/stmt.go
+index b598a4f068..cef7a24907 100644
+--- a/src/cmd/compile/internal/types2/stmt.go
++++ b/src/cmd/compile/internal/types2/stmt.go
+@@ -63,9 +63,6 @@ func (check *Checker) usage(scope *Scope) {
+        sort.Slice(unused, func(i, j int) bool {
+                return cmpPos(unused[i].pos, unused[j].pos) < 0
+        })
+-       for _, v := range unused {
+-               check.softErrorf(v.pos, UnusedVar, "declared and not used: %s", v.name)
+-       }
+ 
+        for _, scope := range scope.children {
+                // Don't go inside function literal scopes a second time;
+diff --git a/src/go/types/resolver.go b/src/go/types/resolver.go
+index e6e882e35f..c963f32793 100644
+--- a/src/go/types/resolver.go
++++ b/src/go/types/resolver.go
+@@ -748,22 +748,8 @@ func (check *Checker) unusedImports() {
+ }
+ 
+ func (check *Checker) errorUnusedPkg(obj *PkgName) {
+-       // If the package was imported with a name other than the final
+-       // import path element, show it explicitly in the error message.
+-       // Note that this handles both renamed imports and imports of
+-       // packages containing unconventional package declarations.
+-       // Note that this uses / always, even on Windows, because Go import
+-       // paths always use forward slashes.
+-       path := obj.imported.path
+-       elem := path
+-       if i := strings.LastIndex(elem, "/"); i >= 0 {
+-               elem = elem[i+1:]
+-       }
+-       if obj.name == "" || obj.name == "." || obj.name == elem {
+-               check.softErrorf(obj, UnusedImport, "%q imported and not used", path)
+-       } else {
+-               check.softErrorf(obj, UnusedImport, "%q imported as %s and not used", path, obj.name)
+-       }
++       // noop
++       _ = obj
+ }
+ 
+ // dir makes a good-faith attempt to return the directory
