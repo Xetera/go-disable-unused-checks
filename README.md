@@ -12,8 +12,9 @@ It's helpful to have a standard go compiler in CI to catch any potential unused 
 # Installing
 
 1. Clone the [go compiler](https://github.com/golang/go)
-2. Figure out if you're gonna blindly copy paste the command below or check the file first. It's not being piped into `bash` or anything, what's the worst that can happen right?
-3. Apply the patches `curl -L https://raw.githubusercontent.com/Xetera/go-disable-unused-checks/refs/heads/main/bettergo.patch -o - | git apply --ignore-whitespace`
+2. `git checkout go1.23.1`. You can try a newer version if it's available but it might not apply super cleanly.
+3. Figure out if you're gonna blindly copy paste the command below or check the file first. It's not being piped into `bash` or anything, what's the worst that can happen right?
+4. Apply the patches `curl -L https://raw.githubusercontent.com/Xetera/go-disable-unused-checks/refs/heads/main/bettergo.patch -o - | git apply --ignore-whitespace`
 5. Follow the rest of the instructions to build it from source. Good luck, you'll need it.
 
 ## Tooling
