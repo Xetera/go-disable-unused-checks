@@ -1,5 +1,5 @@
 diff --git a/src/cmd/compile/internal/types2/resolver.go b/src/cmd/compile/internal/types2/resolver.go
-index 5676aa3618..8fee0f7128 100644
+index 5676aa3618..b2ad788ddc 100644
 --- a/src/cmd/compile/internal/types2/resolver.go
 +++ b/src/cmd/compile/internal/types2/resolver.go
 @@ -760,22 +760,8 @@ func (check *Checker) unusedImports() {
@@ -42,7 +42,7 @@ index b598a4f068..cef7a24907 100644
         for _, scope := range scope.children {
                 // Don't go inside function literal scopes a second time;
 diff --git a/src/go/types/resolver.go b/src/go/types/resolver.go
-index e6e882e35f..c963f32793 100644
+index e6e882e35f..86334d3820 100644
 --- a/src/go/types/resolver.go
 +++ b/src/go/types/resolver.go
 @@ -748,22 +748,8 @@ func (check *Checker) unusedImports() {
@@ -70,3 +70,37 @@ index e6e882e35f..c963f32793 100644
  }
  
  // dir makes a good-faith attempt to return the directory
+diff --git a/src/go/types/stmt.go b/src/go/types/stmt.go
+index c9f7a4f929..9ea73206db 100644
+--- a/src/go/types/stmt.go
++++ b/src/go/types/stmt.go
+@@ -64,9 +64,6 @@ func (check *Checker) usage(scope *Scope) {
+        sort.Slice(unused, func(i, j int) bool {
+                return cmpPos(unused[i].pos, unused[j].pos) < 0
+        })
+-       for _, v := range unused {
+-               check.softErrorf(v, UnusedVar, "declared and not used: %s", v.name)
+-       }
+ 
+        for _, scope := range scope.children {
+                // Don't go inside function literal scopes a second time;
+@@ -749,20 +746,6 @@ func (check *Checker) stmt(ctxt stmtContext, s ast.Stmt) {
+                        check.closeScope()
+                }
+ 
+-               // If lhs exists, we must have at least one lhs variable that was used.
+-               if lhs != nil {
+-                       var used bool
+-                       for _, v := range lhsVars {
+-                               if v.used {
+-                                       used = true
+-                               }
+-                               v.used = true // avoid usage error when checking entire function
+-                       }
+-                       if !used {
+-                               check.softErrorf(lhs, UnusedVar, "%s declared and not used", lhs.Name)
+-                       }
+-               }
+-
+        case *ast.SelectStmt:
+                inner |= breakOk
